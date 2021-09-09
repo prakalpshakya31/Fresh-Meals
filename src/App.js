@@ -1,28 +1,27 @@
-import React, { useState } from 'react';
-import Header from './components/Layout/Header';
-import Meals from './components/Meals/Meals';
-import Cart from './components/Cart/Cart';
-import CartProvider from './store/CartProvider';
+import { Switch, Route, Redirect } from 'react-router-dom';
+
+// import Layout from './components/Layout/Layout';
+// import UserProfile from './components/Profile/UserProfile';
+import HomePage from './pages/HomePage';
+import AuthPage from './pages/AuthPage';
+import { useContext} from 'react';
+import AuthContext from './store/auth-context'
 
 function App() {
-  const [cartIsShown, setCartIsShown] = useState(false);
-
-  const showCartHandler = () => {
-    setCartIsShown(true);
-  };
-
-  const hideCartHandler = () => {
-    setCartIsShown(false);
-  };
+  const authCtx = useContext(AuthContext);
 
   return (
-    <CartProvider>
-      {cartIsShown && <Cart onClose={hideCartHandler} />}
-      <Header onShowCart={showCartHandler} />
-      <main>
-        <Meals />
-      </main>
-    </CartProvider>
+    <Switch>
+      <Route path="/" exact>
+        <HomePage />
+      </Route>
+      {!authCtx.isLoggedIn && <Route path="/auth">
+        <AuthPage />
+      </Route>}
+      <Route path='*'>
+        <Redirect to='/' />
+      </Route>
+    </Switch>
   );
 }
 

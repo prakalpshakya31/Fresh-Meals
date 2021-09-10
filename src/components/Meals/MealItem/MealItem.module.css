@@ -1,6 +1,6 @@
 .meal {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   margin: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #ccc;
@@ -10,8 +10,19 @@
   margin: 0 0 0.25rem 0;
 }
 
-.description {
-  font-style: italic;
+.content {
+  margin-left: 5rem;
+}
+
+.image {
+  height: auto;
+  width: auto;
+  border-radius: 8%;
+}
+
+.form {
+  margin-right: 1rem;
+  margin-left: auto;
 }
 
 .price {

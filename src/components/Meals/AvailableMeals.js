@@ -5,6 +5,7 @@ import MealItem from './MealItem/MealItem';
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
+  const [allMeals, setAllMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
 
@@ -28,9 +29,11 @@ const AvailableMeals = () => {
           name: responseData[key].name,
           image: responseData[key].image,
           price: responseData[key].price,
+          category: responseData[key].category,
         });
       }
       setMeals(loadedMeals);
+      setAllMeals(loadedMeals);
       setIsLoading(false);
     };
     fetchMeals().catch((error) => {
@@ -55,6 +58,17 @@ const AvailableMeals = () => {
     );
   }
 
+  const filterItem = (categoryItem) => {
+    const updatedItems = allMeals.filter((currElement) => {
+      return (
+        categoryItem === 'all' ||
+        currElement.category === categoryItem
+      );
+    });
+
+    setMeals(updatedItems);
+  };
+
   const mealsList = meals.map((meal) => (
     <MealItem
       id={meal.id}
@@ -67,6 +81,23 @@ const AvailableMeals = () => {
 
   return (
     <section className={classes.meals}>
+      <div className={classes.filters}>
+        <button onClick={() => filterItem('all')}>
+          All
+        </button>
+        <button onClick={() => filterItem('Starters')}>
+          Starters
+        </button>
+        <button onClick={() => filterItem('Main Course')}>
+          Main Course
+        </button>
+        <button onClick={() => filterItem('Bread')}>
+          Bread
+        </button>
+        <button onClick={() => filterItem('Thalis')}>
+          Thalis
+        </button>
+      </div>
       <Card>
         <ul>{mealsList}</ul>
       </Card>

@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import CartContext from './cart-context';
 
@@ -6,6 +6,31 @@ const defaultCartState = {
   items: [],
   totalAmount: 0,
 };
+
+const cartFromLocalStorage = JSON.parse(
+  localStorage.getItem('items')
+);
+// const amountFromLocalStorage = JSON.parse(
+//   localStorage.getItem('amount')
+// );
+
+let amountFromLocalStorage = 0;
+
+for (const key in cartFromLocalStorage) {
+  amountFromLocalStorage +=
+    cartFromLocalStorage[key].amount *
+    cartFromLocalStorage[key].price;
+}
+
+amountFromLocalStorage = parseInt(amountFromLocalStorage);
+
+console.log(cartFromLocalStorage);
+console.log(typeof amountFromLocalStorage);
+
+if (cartFromLocalStorage) {
+  defaultCartState.items = cartFromLocalStorage;
+  defaultCartState.totalAmount = amountFromLocalStorage;
+}
 
 const cartReducer = (state, action) => {
   if (action.type === 'ADD') {
@@ -34,6 +59,13 @@ const cartReducer = (state, action) => {
       updatedItems = state.items.concat(action.item);
     }
 
+    localStorage.setItem(
+      'items',
+      JSON.stringify(updatedItems)
+    );
+
+    console.log(typeof updatedTotalAmount);
+
     return {
       items: updatedItems,
       totalAmount: updatedTotalAmount,
@@ -61,6 +93,11 @@ const cartReducer = (state, action) => {
       updatedItems[existingCartItemIndex] = updatedItem;
     }
 
+    localStorage.setItem(
+      'items',
+      JSON.stringify(updatedItems)
+    );
+
     return {
       items: updatedItems,
       totalAmount: updatedTotalAmount,
@@ -68,6 +105,8 @@ const cartReducer = (state, action) => {
   }
 
   if (action.type === 'CLEAR') {
+    localStorage.removeItem('items');
+
     return defaultCartState;
   }
 
@@ -97,7 +136,7 @@ const CartProvider = (props) => {
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
-    clearCart: clearCartHandler
+    clearCart: clearCartHandler,
   };
 
   return (

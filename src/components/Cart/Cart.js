@@ -4,12 +4,18 @@ import { Fragment, useContext, useState } from 'react';
 import CartContext from '../../store/cart-context';
 import CartItem from './CartItem';
 import Checkout from './Checkout';
+import AuthContext from '../../store/auth-context';
+import { useHistory } from 'react-router';
 
 const Cart = (props) => {
   const [isCheckout, setIsCheckout] = useState(false);
   const cartCtx = useContext(CartContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [didSubmit, setDidSubmit] = useState(false);
+
+  const history = useHistory();
+
+  const authCtx = useContext(AuthContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
   const hasItems = cartCtx.items.length > 0;
@@ -23,7 +29,9 @@ const Cart = (props) => {
   };
 
   const orderHandler = () => {
-    setIsCheckout(true);
+    if (!authCtx.isLoggedIn) {
+      history.replace('/auth');
+    } else setIsCheckout(true);
   };
 
   const submitOrderHandler = (userData) => {

@@ -1,6 +1,4 @@
 import React from 'react';
-
-import mealsImage from '../../assets/meals.jpg';
 import classes from './Header.module.css';
 import HeaderCartButton from './HeaderCartButton';
 import { Link } from 'react-router-dom';
@@ -19,19 +17,27 @@ const Header = (props) => {
   return (
     <React.Fragment>
       <header className={classes.header}>
-        <h1>Fresh Meals</h1>
-        {!isLoggedIn && <Link to="/auth">Login</Link>}
-        {isLoggedIn && (
-          <button onClick={logoutHandler}>Logout</button>
-        )}
+        <Link to="/">
+          <div className={classes.logo}>Fresh Meals</div>
+        </Link>
+        <ul>
+          <li>
+            {!isLoggedIn && <Link to="/auth">Login</Link>}
+          </li>
+          <li>
+            {isLoggedIn && (
+              <button
+                onClick={logoutHandler}
+                className={classes.logout}
+              >
+                <div>Logout</div>
+              </button>
+            )}
+          </li>
+        </ul>
+
         <HeaderCartButton onClick={props.onShowCart} />
       </header>
-      <div className={classes['main-image']}>
-        <img
-          src={mealsImage}
-          alt="A table full of delicious food!"
-        />
-      </div>
     </React.Fragment>
   );
 };

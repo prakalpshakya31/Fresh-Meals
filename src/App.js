@@ -8,7 +8,7 @@ import { useContext} from 'react';
 import AuthContext from './store/auth-context'
 
 function App() {
-  const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext) ;
 
   return (
     <Switch>
